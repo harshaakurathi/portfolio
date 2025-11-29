@@ -1,0 +1,297 @@
+/* =========================================
+   1. VARIABLES & RESET
+   ========================================= */
+:root {
+    --bg-color: #f0f0e6; 
+    --card-bg: #ffffff;
+    
+    --accent-yellow: #FFD600; 
+    --accent-green: #00E676;  
+    --accent-black: #1a1a1a;  
+    
+    --shadow-hard: 5px 5px 0px var(--accent-black); 
+    --border-thick: 3px solid var(--accent-black);
+    
+    --font-main: 'Space Grotesk', sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg-color);
+    background-image: radial-gradient(var(--accent-black) 1px, transparent 1px);
+    background-size: 20px 20px;
+    margin: 0;
+    padding: 0;
+    color: var(--accent-black);
+    height: 100vh; 
+    overflow: hidden; /* Lock body */
+}
+
+/* =========================================
+   2. MAIN LAYOUT
+   ========================================= */
+.container {
+    max-width: 1600px;
+    height: 100vh;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 340px 1fr; /* Sidebar | Content */
+}
+
+/* Sidebar */
+.profile-card {
+    background: var(--accent-yellow);
+    border-right: var(--border-thick);
+    padding: 40px;
+    text-align: center;
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+}
+
+.photo-frame {
+    width: 150px;
+    height: 150px;
+    background: white;
+    border: var(--border-thick);
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-hard);
+}
+
+.profile-img { width: 100%; height: 100%; object-fit: cover; }
+
+.name {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    line-height: 1.1;
+}
+
+.role {
+    font-weight: 500;
+    margin-bottom: 25px;
+    border-bottom: 2px solid black;
+    padding-bottom: 5px;
+}
+
+.contact-link {
+    display: block;
+    background: white;
+    border: 2px solid black;
+    color: black;
+    text-decoration: none;
+    padding: 12px;
+    margin-bottom: 12px;
+    font-weight: 700;
+    transition: transform 0.2s;
+    box-shadow: 4px 4px 0px black;
+    width: 100%;
+}
+
+.contact-link:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px black;
+    background: var(--accent-green);
+}
+
+/* =========================================
+   3. CONTENT AREA (Right Side)
+   ========================================= */
+.grid-layout {
+    height: 100vh;
+    overflow-y: auto; 
+    padding: 40px;
+    display: grid;
+    grid-template-columns: 1fr; /* Stack main sections vertically */
+    gap: 40px;
+}
+
+/* Universal Card Container */
+.card {
+    background: white;
+    border: var(--border-thick);
+    box-shadow: var(--shadow-hard);
+    padding: 30px;
+    position: relative;
+}
+
+.full-width-card { width: 100%; }
+
+.card-header {
+    background: black;
+    color: white;
+    padding: 8px 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    display: inline-block;
+    margin-bottom: 25px;
+    border-radius: 4px;
+    box-shadow: 3px 3px 0px rgba(0,0,0,0.3);
+}
+
+/* =========================================
+   4. INFO BOXES (Exp, Projects, Edu)
+   ========================================= */
+.timeline-container, .grid-2-col {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.grid-2-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.info-box {
+    background: #ffffff;
+    border: 2px solid black;
+    box-shadow: 5px 5px 0px var(--accent-black);
+    position: relative;
+    margin-top: 10px; 
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+.info-box:hover {
+    transform: translateY(-5px) rotateX(2deg) rotateY(-2deg);
+    box-shadow: 10px 10px 0px var(--accent-green);
+    border-color: black;
+    z-index: 10;
+}
+
+.tab-badge {
+    background: var(--accent-yellow);
+    color: black;
+    font-weight: 800;
+    padding: 8px 15px;
+    font-size: 0.85rem;
+    position: absolute;
+    top: -16px;
+    left: -2px;
+    border: 2px solid black;
+    box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+    z-index: 2;
+}
+
+.yellow-tab { background: var(--accent-yellow); }
+.green-tab { background: var(--accent-green); }
+
+.box-content {
+    padding: 25px 20px 20px 20px;
+}
+
+.box-content h3 { margin: 5px 0; font-size: 1.2rem; }
+.box-content h4 { margin: 0 0 10px 0; color: #555; font-size: 1rem; }
+.box-content p { font-size: 0.95rem; line-height: 1.5; color: #333; }
+
+.desc-list { padding-left: 20px; font-size: 0.95rem; margin-bottom: 0; }
+.desc-list li { margin-bottom: 5px; }
+
+.tech-row {
+    margin-top: 15px;
+    font-size: 1.2rem;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.tech-row span { font-size: 0.9rem; font-weight: bold; }
+
+.btn-link {
+    display: inline-block;
+    margin-top: 15px;
+    text-decoration: none;
+    font-weight: bold;
+    color: black;
+    border-bottom: 2px solid var(--accent-green);
+}
+
+/* =========================================
+   5. HERO SECTION
+   ========================================= */
+.hero-card {
+    border-left: 10px solid var(--accent-green);
+    transform-style: preserve-3d;
+    transition: transform 0.3s;
+}
+.hero-card:hover { transform: scale(1.02); }
+.hero-card h2 { font-size: 2.5rem; margin: 0 0 10px 0; }
+
+/* =========================================
+   6. NEW SKILL CARDS (Readable & Colorful)
+   ========================================= */
+.skill-card {
+    background: white;
+    border: 2px solid black;
+    box-shadow: 5px 5px 0px var(--accent-black);
+    transition: transform 0.2s;
+    overflow: hidden; /* Ensures header color fills top */
+    transform-style: preserve-3d;
+}
+
+.skill-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 8px 8px 0px var(--accent-black);
+}
+
+.skill-header {
+    padding: 12px 15px;
+    font-weight: 800;
+    text-transform: uppercase;
+    border-bottom: 2px solid black;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+}
+
+/* Header Colors */
+.yellow-bg { background: var(--accent-yellow); color: black; }
+.green-bg { background: var(--accent-green); color: black; }
+
+.skill-list {
+    list-style: none;
+    padding: 20px;
+    margin: 0;
+}
+
+.skill-list li {
+    padding: 5px 0;
+    border-bottom: 1px dashed #ddd;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.skill-list li:last-child {
+    border-bottom: none;
+}
+
+/* =========================================
+   7. SCROLLBAR & MOBILE
+   ========================================= */
+::-webkit-scrollbar { width: 12px; }
+::-webkit-scrollbar-track { background: var(--bg-color); border-left: 2px solid black; }
+::-webkit-scrollbar-thumb { background: var(--accent-yellow); border: 2px solid black; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-green); }
+
+@media (max-width: 900px) {
+    body { overflow: auto; height: auto; }
+    .container { display: block; height: auto; }
+    .profile-card { width: auto; height: auto; border-right: none; border-bottom: var(--border-thick); }
+    .grid-layout { display: block; height: auto; overflow: visible; padding: 20px; }
+    .grid-2-col { grid-template-columns: 1fr; }
+    .hero-card h2 { font-size: 2rem; }
+}
