@@ -17,6 +17,10 @@
 
 * { box-sizing: border-box; }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: var(--font-main);
     background-color: var(--bg-color);
@@ -25,33 +29,44 @@ body {
     margin: 0;
     padding: 0;
     color: var(--accent-black);
-    height: 100vh; 
-    overflow: hidden; /* Lock body */
+    min-height: 100vh;
 }
 
 /* =========================================
-   2. MAIN LAYOUT
+   2. SIDEBAR (FIXED LEFT)
    ========================================= */
-.container {
-    max-width: 1600px;
-    height: 100vh;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 340px 1fr; /* Sidebar | Content */
-}
-
-/* Sidebar */
 .profile-card {
     background: var(--accent-yellow);
     border-right: var(--border-thick);
-    padding: 40px;
+    padding: 30px;
     text-align: center;
-    height: 100%;
+    
+    /* Fixed Position: Always stays on the left */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 340px;
+    height: 100vh;
     overflow-y: auto;
+    z-index: 1000;
+    
     display: flex;
     flex-direction: column;
     align-items: center;
-    z-index: 10;
+}
+
+/* Sidebar Title */
+.sidebar-header {
+    font-size: 1.5rem;
+    font-weight: 800;
+    background: black;
+    color: white;
+    padding: 5px 15px;
+    transform: rotate(-2deg);
+    margin-bottom: 30px;
+    border: 2px solid white;
+    box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+    flex-shrink: 0; 
 }
 
 .photo-frame {
@@ -83,6 +98,8 @@ body {
     padding-bottom: 5px;
 }
 
+.contact-info { width: 100%; }
+
 .contact-link {
     display: block;
     background: white;
@@ -104,24 +121,71 @@ body {
 }
 
 /* =========================================
-   3. CONTENT AREA (Right Side)
+   3. MAIN CONTENT (FULL WIDTH)
    ========================================= */
 .grid-layout {
-    height: 100vh;
-    overflow-y: auto; 
-    padding: 40px;
-    display: grid;
-    grid-template-columns: 1fr; /* Stack main sections vertically */
+    /* Pushes content to the right of the fixed sidebar */
+    margin-left: 340px; 
+    
+    /* TAKES REMAINING SPACE (Fixes the 25% empty issue) */
+    width: calc(100% - 340px);
+    
+    padding: 20px 40px 60px 40px;
+    display: flex;
+    flex-direction: column;
     gap: 40px;
+    position: relative;
+    /* Removed max-width: 1200px so it stretches fully */
 }
 
-/* Universal Card Container */
+/* STICKY NAV BAR */
+.top-nav {
+    position: sticky;
+    top: 0;
+    background: rgba(240, 240, 230, 0.95);
+    backdrop-filter: blur(5px);
+    padding: 20px 0;
+    z-index: 500;
+    display: flex;
+    gap: 15px;
+    border-bottom: 2px solid black;
+    margin-bottom: 10px;
+    flex-wrap: wrap; 
+}
+
+.nav-item {
+    text-decoration: none;
+    color: black;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 8px 16px;
+    border: 2px solid black;
+    background: white;
+    box-shadow: 3px 3px 0px black;
+    transition: 0.2s;
+    text-transform: uppercase;
+}
+
+.nav-item:hover, .nav-item.active {
+    background: black;
+    color: var(--accent-yellow);
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0px var(--accent-green);
+}
+
+.special-link { background: var(--accent-yellow); }
+
+/* =========================================
+   4. CARDS & SECTIONS
+   ========================================= */
 .card {
     background: white;
     border: var(--border-thick);
     box-shadow: var(--shadow-hard);
     padding: 30px;
     position: relative;
+    scroll-margin-top: 100px; 
+    width: 100%; /* Ensure card takes full available width */
 }
 
 .full-width-card { width: 100%; }
@@ -139,159 +203,117 @@ body {
     box-shadow: 3px 3px 0px rgba(0,0,0,0.3);
 }
 
-/* =========================================
-   4. INFO BOXES (Exp, Projects, Edu)
-   ========================================= */
-.timeline-container, .grid-2-col {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
+/* --- Hero Section --- */
+.hero-card {
+    border-left: 10px solid var(--accent-green);
+    transform-style: preserve-3d;
+    transition: transform 0.3s;
 }
+.hero-card:hover { transform: scale(1.01); } /* Subtle zoom */
+.hero-card h2 { font-size: 2.5rem; margin: 0 0 10px 0; }
 
+/* --- Grids (Skills, Projects, etc) --- */
 .grid-2-col {
     display: grid;
+    /* Responsive Columns: Will stretch to fill space */
     grid-template-columns: 1fr 1fr;
     gap: 30px;
+    width: 100%;
 }
+
+/* Skill Cards */
+.skill-card {
+    background: white;
+    border: 2px solid black;
+    box-shadow: 5px 5px 0px var(--accent-black);
+    transition: transform 0.2s;
+    width: 100%; /* Full width of grid cell */
+}
+.skill-card:hover { transform: translateY(-5px); box-shadow: 8px 8px 0px var(--accent-black); }
+.skill-header { padding: 12px 15px; font-weight: 800; text-transform: uppercase; border-bottom: 2px solid black; display: flex; align-items: center; gap: 10px; font-size: 0.9rem; }
+.yellow-bg { background: var(--accent-yellow); color: black; }
+.green-bg { background: var(--accent-green); color: black; }
+.skill-list { list-style: none; padding: 20px; margin: 0; }
+.skill-list li { padding: 5px 0; border-bottom: 1px dashed #ddd; font-weight: 500; }
+.skill-list li:last-child { border-bottom: none; }
+
+/* --- Info Boxes (Exp, Projects) --- */
+.timeline-container { display: flex; flex-direction: column; gap: 30px; width: 100%; }
 
 .info-box {
     background: #ffffff;
     border: 2px solid black;
     box-shadow: 5px 5px 0px var(--accent-black);
     position: relative;
-    margin-top: 10px; 
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-    transform-style: preserve-3d;
-    perspective: 1000px;
+    margin-top: 20px; 
+    transition: all 0.3s ease;
+    width: 100%; /* Stretch fully */
 }
-
 .info-box:hover {
-    transform: translateY(-5px) rotateX(2deg) rotateY(-2deg);
+    transform: translateY(-5px);
     box-shadow: 10px 10px 0px var(--accent-green);
-    border-color: black;
     z-index: 10;
 }
-
 .tab-badge {
-    background: var(--accent-yellow);
-    color: black;
-    font-weight: 800;
-    padding: 8px 15px;
-    font-size: 0.85rem;
-    position: absolute;
-    top: -16px;
-    left: -2px;
-    border: 2px solid black;
-    box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
-    z-index: 2;
+    background: var(--accent-yellow); color: black; font-weight: 800;
+    padding: 8px 15px; font-size: 0.85rem; position: absolute;
+    top: -16px; left: -2px; border: 2px solid black; z-index: 2;
 }
-
 .yellow-tab { background: var(--accent-yellow); }
 .green-tab { background: var(--accent-green); }
-
-.box-content {
-    padding: 25px 20px 20px 20px;
-}
-
+.box-content { padding: 30px 20px 20px 20px; }
 .box-content h3 { margin: 5px 0; font-size: 1.2rem; }
 .box-content h4 { margin: 0 0 10px 0; color: #555; font-size: 1rem; }
-.box-content p { font-size: 0.95rem; line-height: 1.5; color: #333; }
+.tech-row { margin-top: 15px; display: flex; gap: 10px; font-weight: bold; flex-wrap: wrap; }
+.btn-link { display: inline-block; margin-top: 15px; font-weight: bold; color: black; border-bottom: 2px solid var(--accent-green); text-decoration: none;}
 
-.desc-list { padding-left: 20px; font-size: 0.95rem; margin-bottom: 0; }
-.desc-list li { margin-bottom: 5px; }
-
-.tech-row {
-    margin-top: 15px;
-    font-size: 1.2rem;
-    color: #333;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+/* =========================================
+   5. RESPONSIVENESS (MOBILE & TABLET)
+   ========================================= */
+@media (max-width: 1024px) {
+    /* TABLETS: Reduce sidebar width slightly */
+    .profile-card { width: 280px; }
+    .grid-layout { margin-left: 280px; width: calc(100% - 280px); padding: 20px; }
 }
-.tech-row span { font-size: 0.9rem; font-weight: bold; }
 
-.btn-link {
-    display: inline-block;
-    margin-top: 15px;
-    text-decoration: none;
-    font-weight: bold;
-    color: black;
-    border-bottom: 2px solid var(--accent-green);
+@media (max-width: 900px) {
+    /* MOBILE: Stack everything */
+    body {
+        min-height: auto;
+    }
+    
+    .profile-card {
+        position: relative; /* Un-fix the sidebar */
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 3px solid black;
+        padding: 40px 20px;
+    }
+    
+    .grid-layout {
+        margin-left: 0;
+        width: 100%;
+        padding: 20px;
+    }
+    
+    .top-nav {
+        top: 0;
+        padding: 15px 5px;
+        justify-content: flex-start;
+    }
+
+    .grid-2-col {
+        grid-template-columns: 1fr; /* 1 Column on mobile */
+    }
+    
+    .hero-card h2 { font-size: 2rem; }
 }
 
 /* =========================================
-   5. HERO SECTION
+   6. SCROLLBAR STYLING
    ========================================= */
-.hero-card {
-    border-left: 10px solid var(--accent-green);
-    transform-style: preserve-3d;
-    transition: transform 0.3s;
-}
-.hero-card:hover { transform: scale(1.02); }
-.hero-card h2 { font-size: 2.5rem; margin: 0 0 10px 0; }
-
-/* =========================================
-   6. NEW SKILL CARDS (Readable & Colorful)
-   ========================================= */
-.skill-card {
-    background: white;
-    border: 2px solid black;
-    box-shadow: 5px 5px 0px var(--accent-black);
-    transition: transform 0.2s;
-    overflow: hidden; /* Ensures header color fills top */
-    transform-style: preserve-3d;
-}
-
-.skill-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 8px 8px 0px var(--accent-black);
-}
-
-.skill-header {
-    padding: 12px 15px;
-    font-weight: 800;
-    text-transform: uppercase;
-    border-bottom: 2px solid black;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.9rem;
-}
-
-/* Header Colors */
-.yellow-bg { background: var(--accent-yellow); color: black; }
-.green-bg { background: var(--accent-green); color: black; }
-
-.skill-list {
-    list-style: none;
-    padding: 20px;
-    margin: 0;
-}
-
-.skill-list li {
-    padding: 5px 0;
-    border-bottom: 1px dashed #ddd;
-    font-weight: 500;
-    font-size: 0.95rem;
-}
-
-.skill-list li:last-child {
-    border-bottom: none;
-}
-
-/* =========================================
-   7. SCROLLBAR & MOBILE
-   ========================================= */
-::-webkit-scrollbar { width: 12px; }
+::-webkit-scrollbar { width: 12px; height: 12px; }
 ::-webkit-scrollbar-track { background: var(--bg-color); border-left: 2px solid black; }
 ::-webkit-scrollbar-thumb { background: var(--accent-yellow); border: 2px solid black; }
 ::-webkit-scrollbar-thumb:hover { background: var(--accent-green); }
-
-@media (max-width: 900px) {
-    body { overflow: auto; height: auto; }
-    .container { display: block; height: auto; }
-    .profile-card { width: auto; height: auto; border-right: none; border-bottom: var(--border-thick); }
-    .grid-layout { display: block; height: auto; overflow: visible; padding: 20px; }
-    .grid-2-col { grid-template-columns: 1fr; }
-    .hero-card h2 { font-size: 2rem; }
-}
