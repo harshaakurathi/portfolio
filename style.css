@@ -138,7 +138,7 @@ body {
     /* Removed max-width: 1200px so it stretches fully */
 }
 
-/* STICKY NAV BAR */
+
 .top-nav {
     position: sticky;
     top: 0;
